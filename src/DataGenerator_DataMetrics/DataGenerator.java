@@ -49,4 +49,19 @@ public class DataGenerator
 
         return arr;
     }
+
+    public static int[] generate(String type, int size) {
+        switch (type) {
+            case "random":
+                return random(size);
+            case "sorted":
+                return sorted(size);
+            case "reversed":
+                return reversed(size);
+            case "partial":
+                return partiallySorted(size);
+            default:
+                throw new IllegalArgumentException("Unknown type: " + type);
+        }
+    }
 }

@@ -3,49 +3,29 @@ import SortAlgorithm.BubbleSort;
 import DataGenerator_DataMetrics.Metrics;
 import SortAlgorithm.SortAlgorithm;
 import SortAlgorithm.QuickSort;
+import SortAlgorithm.MergeSort;
+import SortAlgorithm.HeapSort;
+import DataGenerator_DataMetrics.BenchmarkRunner;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Main
-{
+public class Main {
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
 
         List<SortAlgorithm> algorithms = Arrays.asList(
                 new BubbleSort(),
-                new QuickSort()
+                new QuickSort(),
+                new MergeSort(),
+                new HeapSort()
         );
 
-        int[] sizes = {100, 1000, 5000};
+        int[] sizes = {100, 1000, 5000, 10000, 50000, 100000};
 
-        for (int size : sizes) {
-            System.out.println("\n===== SIZE: " + size + " =====");
+        String[] types = {"random", "sorted", "reversed", "partial"};
 
-            for (SortAlgorithm algorithm : algorithms) {
-
-                int[] data = DataGenerator.random(size);
-                int[] copy = data.clone();
-
-                runTest(copy, algorithm);
-            }
-        }
-    }
-
-    public static void runTest(int[] data, SortAlgorithm algorithm) {
-
-        Metrics metrics = new Metrics();
-
-        long start = System.nanoTime();
-        algorithm.sort(data, metrics);
-        long end = System.nanoTime();
-
-        System.out.println(
-                algorithm.getName() +
-                        " | time=" + (end - start) +
-                        " | comp=" + metrics.comparisons +
-                        " | swaps=" + metrics.swaps
-        );
+        BenchmarkRunner runner = new BenchmarkRunner();
+        runner.run(algorithms, sizes, types);
     }
 }
