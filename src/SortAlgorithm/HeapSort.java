@@ -1,45 +1,54 @@
 package SortAlgorithm;
 import DataGenerator_DataMetrics.Metrics;
 
-public class HeapSort implements SortAlgorithm
-{
+public class HeapSort implements SortAlgorithm {
 
     @Override
-    public void sort(int[] array, Metrics metrics) {
-        int n = array.length;
+    public void sort(int[] arr, Metrics metrics) {
+        int n = arr.length;
 
+        // Построение кучи (max heap)
         for (int i = n / 2 - 1; i >= 0; i--) {
-            heapify(array, n, i, metrics);
+            heapify(arr, n, i, metrics);
         }
 
+        // Извлечение элементов из кучи
         for (int i = n - 1; i > 0; i--) {
-            swap(array, 0, i, metrics);
-            heapify(array, i, 0, metrics);
+
+            swap(arr, 0, i, metrics);
+
+            heapify(arr, i, 0, metrics);
         }
     }
 
-    private void heapify(int[] arr, int heapSize, int rootIndex, Metrics metrics) {
-        int largest = rootIndex;
-        int leftChild = 2 * rootIndex + 1;
-        int rightChild = 2 * rootIndex + 2;
+    private void heapify(int[] arr, int n, int i, Metrics metrics) {
 
-        if (leftChild < heapSize) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        // Левый ребёнок
+        if (left < n) {
             metrics.comparisons++;
-            if (arr[leftChild] > arr[largest]) {
-                largest = leftChild;
+            if (arr[left] > arr[largest]) {
+                largest = left;
             }
         }
 
-        if (rightChild < heapSize) {
+        // Правый ребёнок
+        if (right < n) {
             metrics.comparisons++;
-            if (arr[rightChild] > arr[largest]) {
-                largest = rightChild;
+            if (arr[right] > arr[largest]) {
+                largest = right;
             }
         }
 
-        if (largest != rootIndex) {
-            swap(arr, rootIndex, largest, metrics);
-            heapify(arr, heapSize, largest, metrics);
+        // Если не корень — меняем
+        if (largest != i) {
+            swap(arr, i, largest, metrics);
+
+            // Рекурсия
+            heapify(arr, n, largest, metrics);
         }
     }
 

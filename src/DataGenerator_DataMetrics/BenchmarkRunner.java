@@ -13,32 +13,31 @@ import java.util.List;
 public class BenchmarkRunner
 {
 
-    public void run(List<SortAlgorithm> algorithms, int[] sizes, String[] types) {
+    public void run(SortAlgorithm algorithm, int[] sizes, String[] types) {
+
+        System.out.println("\n===== " + algorithm.getName() + " =====");
 
         for (String type : types) {
-            System.out.println("\n===== DATA TYPE: " + type.toUpperCase() + " =====");
+            System.out.println("\nDATA TYPE: " + type);
 
             for (int size : sizes) {
-                System.out.println("\n--- SIZE: " + size + " ---");
 
-                for (SortAlgorithm algorithm : algorithms) {
+                int[] data = DataGenerator.generate(type, size);
+                int[] copy = data.clone();
 
-                    int[] data = DataGenerator.generate(type, size);
-                    int[] copy = data.clone();
+                Metrics metrics = new Metrics();
 
-                    Metrics metrics = new Metrics();
+                long start = System.nanoTime();
+                algorithm.sort(copy, metrics);
+                long end = System.nanoTime();
+                long timeMs = (end - start) / 1_000_000;
 
-                    long start = System.nanoTime();
-                    algorithm.sort(copy, metrics);
-                    long end = System.nanoTime();
-
-                    System.out.println(
-                            algorithm.getName() +
-                                    " | time=" + (end - start) +
-                                    " | comp=" + metrics.comparisons +
-                                    " | swaps=" + metrics.swaps
-                    );
-                }
+                System.out.println(
+                        "size=" + size +
+                                " | time=" + timeMs + " ms" +
+                                " | comp=" + metrics.comparisons +
+                                " | swaps=" + metrics.swaps
+                );
             }
         }
     }
